@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Red Heart</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" type="image/gif" href="Heart.gif">
     <style>
       body {
         margin: 0;
@@ -14,27 +12,13 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        flex-direction: column;
       }
       canvas {
         border: 2px solid red;
       }
-      footer {
-        color: red;
-        font-family: Arial, sans-serif;
-        font-size: 18px;
-        margin-top: 10px;
-      }
     </style>
   </head>
-
   <body>
-    <!-- 🎵 Hudba -->
-    <audio autoplay loop>
-      <source src="Heart.mp3" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
-
     <canvas id="canvas" width="600" height="600"></canvas>
 
     <script>
@@ -52,7 +36,9 @@
              - Math.cos(4 * M);
       }
 
-      let blink = true;
+      let M = 0;
+      let text = "Miluju tee ❤️";
+      let visibleChars = 0;
 
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -60,7 +46,8 @@
         ctx.strokeStyle = "red";
         ctx.lineWidth = 2;
 
-        for (let t = 0; t < Math.PI * 2; t += 0.01) {
+        // kreslení srdce postupně
+        for (let t = 0; t < M; t += 0.01) {
           let x = heartX(t) * 18 + canvas.width / 2;
           let y = -heartY(t) * 18 + canvas.height / 2;
           ctx.lineTo(x, y);
@@ -68,27 +55,28 @@
 
         ctx.stroke();
 
-        // Blikající text uprostřed
-        if (blink) {
-          ctx.font = "bold 40px Arial";
-          ctx.fillStyle = "red";
-          ctx.textAlign = "center";
-          ctx.fillText("Miluju tee ❤️", canvas.width / 2, canvas.height / 2);
-        }
+        // psaní textu písmenko po písmenku
+        ctx.font = "bold 40px Arial";
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
+        ctx.fillText(text.substring(0, visibleChars), canvas.width / 2, canvas.height / 2);
 
-        blink = !blink;
-        requestAnimationFrame(draw);
+        // rychlost psaní podle kreslení srdce
+        if (M < Math.PI * 2) {
+          M += 0.05;
+          if (visibleChars < text.length && M % 0.3 < 0.05) {
+            visibleChars++;
+          }
+          requestAnimationFrame(draw);
+        } else {
+          // restart animace
+          M = 0;
+          visibleChars = 0;
+          requestAnimationFrame(draw);
+        }
       }
 
       draw();
-    </script>
-
-    <footer>
-      © <span id="year"></span> Miluju tee – Žebřík
-    </footer>
-
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
     </script>
   </body>
 </html>
