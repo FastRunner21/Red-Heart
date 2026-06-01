@@ -14,18 +14,33 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
+        flex-direction: column;
       }
       canvas {
         border: 2px solid red;
       }
+      footer {
+        color: red;
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+        margin-top: 10px;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.3; }
+        100% { opacity: 1; }
+      }
     </style>
   </head>
-  <!-- 🎵 Hudba -->
+
+  <body>
+    <!-- 🎵 Hudba -->
     <audio autoplay loop>
       <source src="Heart.mp3" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>
-  <body>
+
     <canvas id="canvas" width="600" height="600"></canvas>
 
     <script>
@@ -43,7 +58,6 @@
              - Math.cos(4 * M);
       }
 
-      let M = 0;
       let blink = true;
 
       function draw() {
@@ -60,33 +74,27 @@
 
         ctx.stroke();
 
-        // Blikající text
+        // Blikající text uprostřed
         if (blink) {
           ctx.font = "bold 40px Arial";
           ctx.fillStyle = "red";
           ctx.textAlign = "center";
           ctx.fillText("Miluju tee ❤️", canvas.width / 2, canvas.height / 2);
         }
-        
+
         blink = !blink;
         requestAnimationFrame(draw);
-      }
-      
-        M += 0.05;
-        if (M < Math.PI * 2) {
-          requestAnimationFrame(draw);
-        } else {
-          M = 0;
-          requestAnimationFrame(draw);
-        }
       }
 
       draw();
     </script>
 
-  <footer>
-  © <span id="year"></span> M
-  </footer>
-    
+    <footer>
+      © <span id="year"></span> Miluju tee – Žebřík
+    </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
   </body>
 </html>
