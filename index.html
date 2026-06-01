@@ -1,0 +1,32 @@
+<canvas id="canvas" width="600" height="600"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+function heart1(M) {
+    return 15 * Math.sin(M) ** 3;
+}
+
+function heart2(M) {
+    return 12 * Math.cos(M)
+         - 5 * Math.cos(2 * M)
+         - 2 * Math.cos(3 * M)
+         - Math.cos(4 * M);
+}
+
+let M = 0;
+
+function draw() {
+    let x = heart1(M) * 18 + canvas.width / 2;
+    let y = -heart2(M) * 18 + canvas.height / 2;
+
+    ctx.fillStyle = "red";
+    ctx.fillRect(x, y, 3, 3);
+
+    M += 0.05;
+    requestAnimationFrame(draw);
+}
+
+draw();
+</script>
