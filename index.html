@@ -1,32 +1,67 @@
-<canvas id="canvas" width="600" height="600"></canvas>
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Red Heart</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      canvas {
+        border: 2px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="600"></canvas>
 
-<script>
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
 
-function heart1(M) {
-    return 15 * Math.sin(M) ** 3;
-}
+      function heartX(M) {
+        return 15 * Math.sin(M) ** 3;
+      }
 
-function heart2(M) {
-    return 12 * Math.cos(M)
-         - 5 * Math.cos(2 * M)
-         - 2 * Math.cos(3 * M)
-         - Math.cos(4 * M);
-}
+      function heartY(M) {
+        return 12 * Math.cos(M)
+             - 5 * Math.cos(2 * M)
+             - 2 * Math.cos(3 * M)
+             - Math.cos(4 * M);
+      }
 
-let M = 0;
+      let M = 0;
 
-function draw() {
-    let x = heart1(M) * 18 + canvas.width / 2;
-    let y = -heart2(M) * 18 + canvas.height / 2;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 2;
 
-    ctx.fillStyle = "red";
-    ctx.fillRect(x, y, 3, 3);
+        for (let t = 0; t < M; t += 0.01) {
+          let x = heartX(t) * 18 + canvas.width / 2;
+          let y = -heartY(t) * 18 + canvas.height / 2;
+          ctx.lineTo(x, y);
+        }
 
-    M += 0.05;
-    requestAnimationFrame(draw);
-}
+        ctx.stroke();
 
-draw();
-</script>
+        M += 0.05;
+        if (M < Math.PI * 2) {
+          requestAnimationFrame(draw);
+        } else {
+          M = 0;
+          requestAnimationFrame(draw);
+        }
+      }
+
+      draw();
+    </script>
+  </body>
+</html>
